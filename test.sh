@@ -43,7 +43,7 @@ cd example
 
 at_least_one_failure=false
 for version in "${meteor_versions[@]}"; do
-	printf "${YELLOW}Testing Docker image geoffreybooth/meteor-base:${version}...${NC}\n"
+	printf "${YELLOW}Testing Docker image softwarerero/meteor-base:${version}...${NC}\n"
 	SECONDS=0
 
 	rm -f test.dockerfile
@@ -63,24 +63,24 @@ for version in "${meteor_versions[@]}"; do
 	fi
 
 	echo 'Creating test app...'
-	run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp geoffreybooth/meteor-base:${version} meteor create --release=${version} test-app"
+	run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp softwarerero/meteor-base:${version} meteor create --release=${version} test-app"
 
 	if [[ "${version}" == 1.6.1* ]] || [[ "${version}" == 1.7 ]] || [[ "${version}" == 1.7.0* ]]; then
 		echo 'Fixing Babel dependency...'
 		cd ./test-app
-		run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp geoffreybooth/meteor-base:${version} meteor npm install --save-exact @babel/runtime@7.0.0-beta.55"
+		run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp softwarerero/meteor-base:${version} meteor npm install --save-exact @babel/runtime@7.0.0-beta.55"
 		cd ..
 	fi
 
 	if [[ "${version}" == 1.8* ]]; then
 		echo 'Fixing jQuery dependency...'
 		cd ./test-app
-		run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp geoffreybooth/meteor-base:${version} meteor npm install jquery"
+		run_with_suppressed_output "docker run --rm --volume ${PWD}:/opt/tmp --workdir /opt/tmp softwarerero/meteor-base:${version} meteor npm install jquery"
 		cd ..
 	fi
 
 	cp "${dockerfile}" test.dockerfile
-	do_sed "s|FROM geoffreybooth/meteor-base:.*|FROM geoffreybooth/meteor-base:${version}|" test.dockerfile
+	do_sed "s|FROM softwarerero/meteor-base:.*|FROM geosoftwarereroffreybooth/meteor-base:${version}|" test.dockerfile
 	do_sed "s|FROM node:.*|FROM node:${node_version}-alpine|" test.dockerfile
 	do_sed "s|/app|/test-app|g" test.dockerfile
 
@@ -113,10 +113,10 @@ for version in "${meteor_versions[@]}"; do
 	run_with_suppressed_output 'node ../test/test.js' || true # Don’t exit if tests fail
 	elapsed="$((($SECONDS / 60) % 60)) min $(($SECONDS % 60)) sec"
 	if [ $exit_code -ne 0 ]; then
-		printf "${RED}FAIL for geoffreybooth/meteor-base:${version}${NC} after ${elapsed}\n"
+		printf "${RED}FAIL for softwarerero/meteor-base:${version}${NC} after ${elapsed}\n"
 		at_least_one_failure=true
 	else
-		printf "${GREEN}PASS for geoffreybooth/meteor-base:${version}${NC} after ${elapsed}\n"
+		printf "${GREEN}PASS for softwarerero/meteor-base:${version}${NC} after ${elapsed}\n"
 	fi
 
 	if [ "${SKIP_CLEANUP:-}" != 1 ]; then

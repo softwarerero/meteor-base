@@ -11,10 +11,12 @@ ENV APP_SOURCE_FOLDER /opt/src
 ENV APP_BUNDLE_FOLDER /opt/bundle
 
 # Install dependencies, based on https://github.com/jshimko/meteor-launchpad/blob/master/scripts/install-deps.sh (only the parts we plan to use)
+# Install dependencies for Cypress
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
 	apt-get install --assume-yes apt-transport-https ca-certificates && \
-	apt-get install --assume-yes --no-install-recommends build-essential bzip2 curl git libarchive-tools python
+	apt-get install --assume-yes --no-install-recommends build-essential bzip2 curl git libarchive-tools python  && \
+  apt-get install --assume-yes libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
 # Install Meteor
 RUN curl https://install.meteor.com/?release=$METEOR_VERSION --output /tmp/install-meteor.sh && \

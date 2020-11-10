@@ -1,3 +1,7 @@
+# Changes of softwarerero/meteor-base to geoffreybooth/meteor-base
+
+This image only installs a few apt dependencies needed to run Cypress tests against Meteor.
+
 # Base Docker Image for Meteor Apps
 
 This repo contains a base Docker image for use by [Meteor](https://www.meteor.com/) apps built using a [multistage Dockerfile](https://docs.docker.com/develop/develop-images/multistage-build/). You might want to use this base because:
